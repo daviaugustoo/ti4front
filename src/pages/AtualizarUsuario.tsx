@@ -2,45 +2,40 @@ import { Autocomplete, Box, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Button, InputGroup, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import { putEmpresa, getEmpresa } from "../services/EmpresasService";
+import { putUsuario, getUsuario } from "../services/UsuariosService";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import InputMask from 'react-input-mask';
 
-export default function AtualizarEmpresa() {
+export default function AtualizarUsuario() {
 
     const id = Number(useSearchParams()[0].get("id") as string)
     const navegar = useNavigate();
-    const [empresa, setEmpresa] = useState<Empresa>()
+    const [usuario, setUsuario] = useState<Usuario>()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const empresa = await getEmpresa(id)
-                setEmpresa(empresa)
-                setNome(empresa.nome);
-                setCnpj(empresa.cnpj);
-                setEmail(empresa.email);
-                setSala(empresa.sala);
-                setTelefone(empresa.telefone);
-                setResponsavel(empresa.responsavel_pelo_cadastro);
+                const usuario = await getUsuario(id)
+                setUsuario(usuario)
+                setNome(usuario.nome);
+                setEmail(usuario.email);
+                setTelefone(usuario.telefone);
+                setSenha(usuario.password);
             }
             catch (error) {
-                console.log("Erro ao buscar empresa")
+                console.log("Erro ao buscar Usuario")
             }
         }
         fetchData();
     }, [])
 
     const [nome, setNome] = useState<string>();
-    const [cnpj, setCnpj] = useState<string>();
     const [email, setEmail] = useState<string>();
-    const [sala, setSala] = useState<string>();
     const [telefone, setTelefone] = useState<string>();
-    const [responsavel, setResponsavel] = useState<string>();
+    const [senha, setSenha] = useState<string>();
     const [emailError, setEmailError] = useState<string>("");
     const [telefoneError, setTelefoneError] = useState<string>("");
-    const [cnpjError, setCnpjError] = useState<string>("");
 
     function validarEmail(email: string) {
         return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
@@ -48,19 +43,11 @@ export default function AtualizarEmpresa() {
     function validarTelefone(telefone: string) {
         return /^\(\d{2}\) \d{5}-\d{4}$/.test(telefone);
     }
-    function validarCnpj(cnpj: string) {
-        return /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
-    }
-    function validarSala(sala: string) {
-        // Só aceita números e no mínimo 1 dígito
-        return /^\d+$/.test(sala);
-    }
 
-    async function atualizarEmpresa(e: React.FormEvent) {
+    async function atualizarUsuario(e: React.FormEvent) {
         e.preventDefault();
         setEmailError("");
         setTelefoneError("");
-        setCnpjError("");
         let erro = false;
         if (!validarEmail(email || "")) {
             setEmailError("Email inválido. Use o formato nome@exemplo.com");
@@ -70,31 +57,22 @@ export default function AtualizarEmpresa() {
             setTelefoneError("Telefone inválido. Use o formato (99) 99999-9999");
             erro = true;
         }
-        if (!validarCnpj(cnpj || "")) {
-            setCnpjError("CNPJ inválido. Use o formato 99.999.999/9999-99");
-            erro = true;
-        }
-        if (!validarSala(sala || "")) {
-            alert("Sala deve conter apenas números.");
-            erro = true;
-        }
         if (erro) return;
 
-        console.log(nome, cnpj, email, sala, telefone, responsavel);
+        console.log(nome, email, telefone, senha);
 
-        if (nome && cnpj && email && sala && telefone && responsavel) {
-            const novaEmpresa = {
+        if (nome && email && telefone && senha) {
+            const novaUsuario = {
                 nome: nome,
-                cnpj: cnpj,
                 email: email,
-                sala: sala,
+                password: senha,
+                password_digest: senha,
                 telefone: telefone,
-                responsavel_pelo_cadastro: responsavel
             };
 
-            await putEmpresa(id, novaEmpresa);
-            alert("Empresa atualizado com sucesso!")
-            navegar("/empresas");
+            await putUsuario(id, novaUsuario);
+            alert("Usuario atualizado com sucesso!")
+            navegar("/usuarios");
         }
     }
 
@@ -102,8 +80,8 @@ export default function AtualizarEmpresa() {
         <>
             <Paper>
                 <Row>
-                    <Form className="p-5" onSubmit={atualizarEmpresa}>
-                        <h1 className="text-center" style={{ color: "#189995" }}>Atualizar Empresa</h1>
+                    <Form className="p-5" onSubmit={atualizarUsuario}>
+                        <h1 className="text-center" style={{ color: "#189995" }}>Atualizar Usuario</h1>
 
                         <InputGroup className="mb-3">
                             <InputGroup.Text>Nome</InputGroup.Text>
@@ -111,29 +89,9 @@ export default function AtualizarEmpresa() {
                                 onChange={(evt) => setNome(evt.target.value)}
                                 type="text"
                                 placeholder="Informe o NOME"
-                                defaultValue={empresa?.nome}
+                                defaultValue={usuario?.nome}
                                 required
                             />
-                        </InputGroup>
-
-                        <InputGroup className="mb-3">
-                            <InputGroup.Text>CNPJ</InputGroup.Text>
-                            <input
-                                className={`form-control ${cnpjError ? "is-invalid" : ""}`}
-                                type="text"
-                                placeholder="99.999.999/9999-99"
-                                required
-                                value={cnpj}
-                                onChange={(e) => {
-                                    let v = e.target.value.replace(/\D/g, "");
-                                    v = v.replace(/^(\d{2})(\d)/, "$1.$2");
-                                    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-                                    v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
-                                    v = v.replace(/(\d{4})(\d)/, "$1-$2");
-                                    setCnpj(v);
-                                }}
-                            />
-                            <div className="invalid-feedback">{cnpjError}</div>
                         </InputGroup>
 
                         <InputGroup className="mb-3">
@@ -147,18 +105,6 @@ export default function AtualizarEmpresa() {
                                 isInvalid={!!emailError}
                             />
                             <Form.Control.Feedback type="invalid">{emailError}</Form.Control.Feedback>
-                        </InputGroup>
-
-                        <InputGroup className="mb-3">
-                            <InputGroup.Text>Sala</InputGroup.Text>
-                            <Form.Control
-                                onChange={(evt) => setSala(evt.target.value)}
-                                type="text"
-                                placeholder="Informe a SALA"
-                                required
-                                pattern="\\d+"
-                                title="Apenas números"
-                            />
                         </InputGroup>
 
                         <InputGroup className="mb-3">
@@ -180,12 +126,12 @@ export default function AtualizarEmpresa() {
                         </InputGroup>
 
                         <InputGroup className="mb-3">
-                            <InputGroup.Text>Responsável pelo Cadastro</InputGroup.Text>
+                            <InputGroup.Text>Senha</InputGroup.Text>
                             <Form.Control
-                                onChange={(evt) => setResponsavel(evt.target.value)}
+                                onChange={(evt) => setSenha(evt.target.value)}
                                 type="text"
-                                placeholder="Quem está cadastrando?"
-                                defaultValue={empresa?.responsavel_pelo_cadastro}
+                                placeholder="Senha do Usuario"
+                                defaultValue={usuario?.password}
                                 required
                             />
                         </InputGroup>

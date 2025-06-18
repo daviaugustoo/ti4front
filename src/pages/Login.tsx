@@ -1,40 +1,43 @@
+import { FunctionsOutlined, Height } from "@mui/icons-material";
 import { Box, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 import { Button, Col, Container, InputGroup, Row } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import fundo from "../imgs/bhtec-fundo.jpg";
+import fundo from "../imgs/bhtec-fundo.jpg"
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import LoginIcon from '@mui/icons-material/Login';
-import api from "../services/api";
+import { login } from "../services/LoginService";
 import { useNavigate } from "react-router";
+import { AxiosError } from "axios";
+import Global from "../Global";
 
 export default function Login() {
     const [email, setEmail] = useState<string>("");
     const [senha, setSenha] = useState<string>("");
-    const navigate = useNavigate(); // Hook do React Router para redirecionar
+    const navegar = useNavigate();
+    const [loading, setLoading] = useState<boolean>(false);
 
-    function handleLogin(event: any) {
-        event.preventDefault(); 
-    
-        const email = event.target.email.value;
-        const senha = event.target.senha.value; 
-    
-        api.post("/api/login", { email, senha }) // Envia apenas email e senha
-            .then(res => {
-                const { nivelAcesso } = res.data;
-    
-                if (nivelAcesso === "admin") {
-                    navigate("/painel-bhtec");
-                } else {
-                    alert("Login inválido ou tipo de usuário incorreto.");
-                }
-            })
-            .catch(err => {
-                alert("Login inválido ou erro na comunicação com o servidor.");
-                console.error(err);
-            });
-    }    
+    function handleLogin(evento: any) {
+        evento.preventDefault()
+        try {
+            setLoading(true);
+            const response = login(email, senha)
+
+            alert("Login realizado com sucesso")
+            setLoading(false);
+            navegar("/eventos")
+
+        } catch (err) {
+            const error = err as AxiosError;
+            if (error.response && error.response.status === 401) {
+                alert("Acesso negado: email ou senha incorretos")
+            } else {
+                alert("Erro ao fazer login")
+                console.error(error)
+            }
+        }
+    }
 
     return (
         <>
@@ -64,7 +67,7 @@ export default function Login() {
                 <Col className="d-flex justify-content-center" sm={12} md={8} lg={6}>
                     <Box className="rounded p-5 shadow-lg w-100" style={{ backgroundColor: "rgba(255,255,255,0.95)" }}>
                         <h1 className="text-center mb-4" style={{ fontWeight: "bold", color: "#1976d2" }}>
-                            Trashmap
+                            Resinálise
                         </h1>
                         <Form onSubmit={handleLogin}>
                             <InputGroup className="mb-4">
@@ -73,20 +76,20 @@ export default function Login() {
                                     type="email"
                                     name="email"
                                     placeholder="Digite seu e-mail"
+                                    onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
                             </InputGroup>
-
                             <InputGroup className="mb-4">
                                 <InputGroup.Text><KeyIcon /></InputGroup.Text>
                                 <Form.Control
                                     type="password"
                                     name="senha"
                                     placeholder="Digite sua senha"
+                                    onChange={(e) => setSenha(e.target.value)}
                                     required
                                 />
                             </InputGroup>
-
                             <div className="d-grid">
                                 <Button variant="primary" type="submit" size="lg">
                                     Entrar

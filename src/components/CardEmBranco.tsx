@@ -8,7 +8,7 @@ type cardProps = {
     conteudo: ReactNode;
 }
 
-export default function CardTotalClientes({ titulo, conteudo }: cardProps) {
+export default function CardEmBranco({ titulo, conteudo }: cardProps) {
 
     return (
         <>
@@ -22,9 +22,11 @@ export default function CardTotalClientes({ titulo, conteudo }: cardProps) {
                     <p className="fw-normal" >
                         <b>{titulo}</b>
                         <br />
-                        <b className="fs-2 fw-normal" style={{ color: "#189995" }}>
-                            {conteudo}
-                        </b>
+                        <div className="pt-4">
+                            <b className="fs-2 fw-normal" style={{ color: "#189995" }}>
+                                {conteudo}
+                            </b>
+                        </div>
                     </p>
                 </Col>
             </Row>

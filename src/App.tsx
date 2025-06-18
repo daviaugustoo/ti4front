@@ -1,38 +1,54 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React, { Children } from 'react';
 import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Global from './Global';
 import Login from './pages/Login';
+import { useState } from 'react';
 
-function App() {
+// interface PrivateRouteProps {
+//   children: ReactNode
+// }
+// function PrivateRoute({ children }: PrivateRouteProps) {
+//   if (!localStorage.getItem('token')) {
+//     return <Navigate to="/login" replace />
+//   }
+
+//   return children
+// }
+
+
+
+export default function App() {
+
+  const [loading, setLoading] = useState(false)
+  const PrivateRoute = ({ children }: any) => {
+    if (localStorage.getItem('token')) {
+      return children;
+    }
+    return <Navigate to="/login" replace />;
+  };
+
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <Login />
-            }
-          />
-          <Route
-            path="/:page"
-            element={
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Login />
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/:page"
+          element={
+            <PrivateRoute>
               <Global />
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <Global />
-            }
-          />
-
-        </Routes >
-      </BrowserRouter >
-    </>
-  );
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
-export default App;

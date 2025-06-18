@@ -6,6 +6,7 @@ import { Form } from "react-bootstrap";
 import { postEmpresa } from "../services/EmpresasService";
 import { useNavigate } from "react-router";
 
+
 export default function NovaEmpresa() {
     const navegar = useNavigate();
     const [nome, setNome] = useState<string>("");
@@ -93,22 +94,22 @@ export default function NovaEmpresa() {
 
                     <InputGroup className="mb-3">
                         <InputGroup.Text>CNPJ</InputGroup.Text>
-                        <InputMask
-                            mask="99.999.999/9999-99"
+                        <input
+                            className={`form-control ${cnpjError ? "is-invalid" : ""}`}
+                            type="text"
+                            placeholder="99.999.999/9999-99"
+                            required
                             value={cnpj}
-                            onChange={(evt) => setCnpj(evt.target.value)}
-                        >
-                            {(inputProps: any) => (
-                                <Form.Control
-                                    {...inputProps}
-                                    type="text"
-                                    placeholder="Informe o CNPJ"
-                                    required
-                                    isInvalid={!!cnpjError}
-                                />
-                            )}
-                        </InputMask>
-                        <Form.Control.Feedback type="invalid">{cnpjError}</Form.Control.Feedback>
+                            onChange={(e) => {
+                                let v = e.target.value.replace(/\D/g, "");
+                                v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+                                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+                                v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+                                v = v.replace(/(\d{4})(\d)/, "$1-$2");
+                                setCnpj(v);
+                            }}
+                        />
+                        <div className="invalid-feedback">{cnpjError}</div>
                     </InputGroup>
 
                     <InputGroup className="mb-3">
@@ -138,22 +139,20 @@ export default function NovaEmpresa() {
 
                     <InputGroup className="mb-3">
                         <InputGroup.Text>Telefone</InputGroup.Text>
-                        <InputMask
-                            mask="(99) 99999-9999"
+                        <input
+                            className={`form-control ${telefoneError ? "is-invalid" : ""}`}
+                            type="text"
+                            placeholder="(99) 99999-9999"
+                            required
                             value={telefone}
-                            onChange={(evt) => setTelefone(evt.target.value)}
-                        >
-                            {(inputProps: any) => (
-                                <Form.Control
-                                    {...inputProps}
-                                    type="text"
-                                    placeholder="Informe o TELEFONE"
-                                    required
-                                    isInvalid={!!telefoneError}
-                                />
-                            )}
-                        </InputMask>
-                        <Form.Control.Feedback type="invalid">{telefoneError}</Form.Control.Feedback>
+                            onChange={(e) => {
+                                let v = e.target.value.replace(/\D/g, "");
+                                v = v.replace(/^(\d{2})(\d)/, "($1) $2");
+                                v = v.replace(/(\d{5})(\d)/, "$1-$2");
+                                setTelefone(v);
+                            }}
+                        />
+                        <div className="invalid-feedback">{telefoneError}</div>
                     </InputGroup>
 
                     <InputGroup className="mb-3">

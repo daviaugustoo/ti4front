@@ -5,9 +5,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getResiduoByEventoId } from "../services/ResiduosService";
 import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { getEvento } from "../services/EventosService";
 
 export default function ResiduosEventos() {
-    const eventoId = useSearchParams()[0].get("id") as String
+    const eventoId = Number(useSearchParams()[0].get("id") as String)
     const navegar = useNavigate()
     const [evento, setEvento] = useState<Evento>();
     const [residuos, setResiduos] = useState<Residuo>();
@@ -29,7 +30,8 @@ export default function ResiduosEventos() {
                     { tipo: "Perigoso", quantidade: residuos?.perigoso || 0 },
                     { tipo: "Isopor", quantidade: residuos?.isopor || 0 }
                 ])
-
+                const evento = await getEvento(eventoId)
+                setEvento(evento)
             }
             catch (error) {
                 console.log("Erro ao buscar resíduos:", error);
@@ -43,7 +45,7 @@ export default function ResiduosEventos() {
             <Col>
                 <Paper className="p-1 mb-1" style={{ backgroundColor: "#189995" }}>
                     <Col className="justify-content-center text-center">
-                        <h2 style={{ color: "#474646" }}>{evento?.nome}</h2>
+                        <h2 style={{ color: "#ffffff" }}>{evento?.nome}</h2>
                     </Col>
                 </Paper>
                 <Paper className="p-3 mb-1" >

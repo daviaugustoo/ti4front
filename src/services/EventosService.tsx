@@ -1,5 +1,25 @@
 import api from "./api";
 
+export async function getEventosPorDataEIdEmpresa(empresaId: number, mes?: number, ano?: number,) {
+    try {
+        const params = mes && ano ? { mes, ano } : {};
+        const response = await api.get(`/eventosPorDataEIdEmpresa/${empresaId}`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar eventos:", error);
+    }
+}
+
+export async function getEventosPorData(mes?: number, ano?: number,) {
+    try {
+        const params = mes && ano ? { mes, ano } : {};
+        const response = await api.get(`/eventosPorData`, { params });
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar eventos:", error);
+    }
+}
+
 export async function getEventos() {
     try {
         const response = await api.get("/eventos");

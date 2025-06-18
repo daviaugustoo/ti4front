@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { getEvento, putEvento } from "../services/EventosService";
 import TextField from '@mui/material/TextField';
 import { useSearchParams } from "react-router-dom";
-import InputMask from 'react-input-mask';
 
 export default function AtualizarEvento() {
     const navegar = useNavigate();
@@ -24,7 +23,6 @@ export default function AtualizarEvento() {
     const [organizador, setOrganizador] = useState<string>("");
     const [responsavel, setResponsavel] = useState<string>("");
     const [quantidadePessoas, setQuantidadePessoas] = useState<number>(0);
-    const [quantidadePessoasError, setQuantidadePessoasError] = useState<string>("");
     const [observacoes, setObservacoes] = useState<string>("");
 
     useEffect(() => {
@@ -54,22 +52,10 @@ export default function AtualizarEvento() {
             }
         };
         buscaData();
-    }, [id]);
-
-    function validarQuantidadePessoas(valor: number) {
-        return Number.isInteger(valor) && valor >= 0;
-    }
+    }, []);
 
     async function criarEvento(e: React.FormEvent) {
         e.preventDefault();
-        setQuantidadePessoasError("");
-        let erro = false;
-        if (!validarQuantidadePessoas(quantidadePessoas)) {
-            setQuantidadePessoasError("Informe apenas números inteiros positivos");
-            erro = true;
-        }
-        if (erro) return;
-
         const empresaSelecionada = empresas.find(empresa =>
             empresa.nome.trim().toLowerCase() === empresaEvento.trim().toLowerCase()
         );
@@ -103,7 +89,7 @@ export default function AtualizarEvento() {
     return (
         <Paper>
             <Form className="p-5" onSubmit={criarEvento}>
-                <h1 className="text-center" style={{ color: "#189995" }}>Atualizar Evento</h1>
+                <h1 className="text-center" style={{ color: "#ffffff" }}>Atualizar de Evento</h1>
                 <Row className="mt-4">
                     <Col>
                         <InputGroup className="mb-3">
@@ -118,7 +104,7 @@ export default function AtualizarEvento() {
                         </InputGroup>
 
                         <InputGroup className="mb-3">
-                            <InputGroup.Text>Data de Início:</InputGroup.Text>
+                            <InputGroup.Text>Data de Inicio:</InputGroup.Text>
                             <Form.Control
                                 type="date"
                                 name="data_inicio"
@@ -142,28 +128,17 @@ export default function AtualizarEvento() {
                     <Col>
                         <InputGroup className="mb-3">
                             <InputGroup.Text>Quantidade de Pessoas:</InputGroup.Text>
-                            <InputMask
-                                mask="999"
-                                value={quantidadePessoas ? quantidadePessoas.toString() : ""}
+                            <Form.Control
+                                type="number"
+                                placeholder="Informe a Quantia de Pessoas"
                                 onChange={(evt) => setQuantidadePessoas(Number(evt.target.value))}
-                            >
-                                {(inputProps: any) => (
-                                    <Form.Control
-                                        {...inputProps}
-                                        type="text"
-                                        placeholder="Informe a Quantia de Pessoas"
-                                        required
-                                        min={0}
-                                        step={1}
-                                        isInvalid={!!quantidadePessoasError}
-                                    />
-                                )}
-                            </InputMask>
-                            <Form.Control.Feedback type="invalid">{quantidadePessoasError}</Form.Control.Feedback>
+                                value={quantidadePessoas}
+                                required
+                            />
                         </InputGroup>
 
                         <InputGroup className="mb-3">
-                            <InputGroup.Text>Responsável Pelo Cadastro:</InputGroup.Text>
+                            <InputGroup.Text>Responsavel Pelo Cadastro:</InputGroup.Text>
                             <Form.Control
                                 type="text"
                                 placeholder="Quem inseriu as informações?"
@@ -177,20 +152,15 @@ export default function AtualizarEvento() {
                 <hr className="p-2" />
                 <Row>
                     <Col>
-                        <InputGroup className="mb-3">
+                        <InputGroup className="mb-3" style={{}}>
                             <InputGroup.Text>Empresa do Evento:</InputGroup.Text>
                             <Autocomplete
                                 disablePortal
                                 options={empresaLista}
-                                value={empresaEvento}
-                                onChange={(event, valor) => {
-                                    setEmpresaEvento(valor || "");
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Empresa" />}
                                 sx={{
-                                    width: 350,
+                                    width: 340, // <-- aqui você controla a largura
                                     '& .MuiInputBase-root': {
-                                        height: 38,
+                                        height: 38, // <-- controla a altura do input
                                         fontSize: '0.9rem',
                                         padding: 0,
                                     },
@@ -199,6 +169,10 @@ export default function AtualizarEvento() {
                                         top: '-6px',
                                     }
                                 }}
+                                onChange={(event, valor) => {
+                                    setEmpresaEvento(valor ? String(valor) : "");
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Empresa" />}
                             />
                         </InputGroup>
                     </Col>

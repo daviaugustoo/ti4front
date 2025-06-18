@@ -30,7 +30,11 @@ import EventosEmpresa from './pages/EventosEmpresa';
 import MetricaEvento from './pages/MetricaEvento'
 import AtualizarEmpresa from './pages/AtualizarEmpresa';
 import AtuaizarEvento from "./pages/AtualizarEvento"
-
+import AccessibilityIcon from '@mui/icons-material/Accessibility';
+import Usuarios from './pages/Usuarios';
+import NovoUsuario from './pages/NovoUsuario';
+import AtualizarUsuario from './pages/AtualizarUsuario';
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Global() {
 
@@ -44,12 +48,13 @@ export default function Global() {
         "Relatorio": "relatorioPrincipal",
         "Eventos": "eventos",
         "Empresas": "empresas",
+        "Usuarios": "usuarios",
     };
     const iconsInterface = {
         "Eventos": <EventIcon sx={{ color: "#189995" }} />,
         "Empresas": <CorporateFareIcon sx={{ color: "#189995" }} />,
         "Relatorio": <ContentPasteIcon sx={{ color: "#189995" }} />,
-
+        "Usuarios": <AccessibilityIcon sx={{ color: "#189995" }} />,
     }
     const urls_hash = new Map(Object.entries(data_urls))
     const icons = new Map(Object.entries(iconsInterface))
@@ -58,10 +63,8 @@ export default function Global() {
         "Relatorio",
         "Eventos",
         "Empresas",
-
-
+        "Usuarios"
     ]
-
 
     const handleDrawerToggle = () => {
         setAaaaa(!aaaaa);
@@ -78,9 +81,17 @@ export default function Global() {
         metricaEvento: "metricaEvento",
         eventosEmpresa: "eventosEmpresa",
         atualizarEmpresa: "atualizarEmpresa",
-        atualizarEvento: "atualizarEvento"
+        atualizarEvento: "atualizarEvento",
+        usuarios: "usuarios",
+        novoUsuario: "novoUsuario",
+        atualizarUsuario: "atualizarUsuario"
     }
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        alert("Você foi desconectado com sucesso!");
+        navegar("/login");
+    };
 
     const drawer = (
         <div>
@@ -109,14 +120,18 @@ export default function Global() {
                         </ListItemButton>
                     </ListItem>
                 ))}
-                {/* <ListItem key={"SAIR"} disablePadding>
-                    <ListItemButton >
+                <ListItem key={"Sair"} disablePadding>
+                    <ListItemButton onClick={handleLogout} >
                         <ListItemIcon style={{ color: "#007cc2" }}>
-                            <LogoutIcon />
+                            <LogoutIcon style={{ color: "#189995" }} />
                         </ListItemIcon>
-                        <ListItemText primary={"SAIR"} />
+                        <ListItemText primary={
+                            <Typography variant="body2" style={{ color: "#474646" }}>
+                                {"Sair"}
+                            </Typography>
+                        } />
                     </ListItemButton>
-                </ListItem> */}
+                </ListItem>
             </List>
         </div>
     )
@@ -188,6 +203,9 @@ export default function Global() {
                             {page === url_nome_paginas.metricaEvento && <MetricaEvento />}
                             {page === url_nome_paginas.atualizarEmpresa && <AtualizarEmpresa />}
                             {page === url_nome_paginas.atualizarEvento && <AtuaizarEvento />}
+                            {page === url_nome_paginas.usuarios && <Usuarios />}
+                            {page === url_nome_paginas.novoUsuario && <NovoUsuario />}
+                            {page === url_nome_paginas.atualizarUsuario && <AtualizarUsuario />}
                         </Box>
                     </div>
                 </Box>
