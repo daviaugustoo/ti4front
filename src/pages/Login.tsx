@@ -18,11 +18,11 @@ export default function Login() {
     const navegar = useNavigate();
     const [loading, setLoading] = useState<boolean>(false);
 
-    function handleLogin(evento: any) {
+    async function handleLogin(evento: any) {
         evento.preventDefault()
         try {
             setLoading(true);
-            const response = login(email, senha)
+            const response = await login(email, senha)
 
             alert("Login realizado com sucesso")
             setLoading(false);
