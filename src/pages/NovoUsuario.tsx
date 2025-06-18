@@ -45,7 +45,6 @@ export default function NovoUsuario() {
                 nome: nome,
                 email: email,
                 password: senha,
-                password_digest: senha,
                 telefone: telefone,
             };
 
