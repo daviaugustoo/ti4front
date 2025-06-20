@@ -145,7 +145,7 @@ export default function Usuarios() {
                             });
                         }}
                     >
-                        <AddIcon sx={{ fontSize: "large" }} /> Nova Usuario
+                        <AddIcon sx={{ fontSize: "large" }} /> Novo Usuario
                     </Button>
                 </Col>
             </Row>

@@ -18,7 +18,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
-
 export default function Eventos() {
     const navegar = useNavigate();
     const [eventos, setEventos] = useState<Evento[]>([]);
@@ -86,10 +85,9 @@ export default function Eventos() {
         return empresa?.nome
     }
 
-    // Filtrar eventos pelo nome
     const eventosFiltrados = eventos.filter(evento =>
         evento.nome.toLowerCase().includes(filtro.toLowerCase())
-    ); // <-- adicionado
+    );
 
     return (
         <>
@@ -101,13 +99,12 @@ export default function Eventos() {
                         </Col>
                     </Paper>
 
-                    <Paper className="p-2 mb-2 mt-2 ">
+                    <Paper className="p-2 mb-2 mt-2">
                         <Row className="align-items-center g-2">
                             {/* Campo de busca */}
                             <Col md={6}>
-
                                 <TextField
-                                    label="Pesquisar evento"
+                                    label="Pesquisar Evento"
                                     variant="outlined"
                                     fullWidth
                                     value={filtro}
@@ -124,11 +121,11 @@ export default function Eventos() {
                                         size="small"
                                         labelId="mes-label"
                                         label="Mês"
+                                        sx={{ '.MuiSvgIcon-root': { color: '#ffffff' } }}
                                         value={selectedMonth}
                                         onChange={(e) => setSelectedMonth(Number(e.target.value))}
                                     >
                                         {[
-
                                             "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
                                         ].map((mes, index) => (
                                             <MenuItem key={index + 1} value={index + 1}>
@@ -142,8 +139,9 @@ export default function Eventos() {
                             {/* Filtro de ano */}
                             <Col md={1} className="justify-content-end text-end">
                                 <FormControl fullWidth>
-                                    <InputLabel id="ano-label">Ano</InputLabel  >
+                                    <InputLabel id="ano-label">Ano</InputLabel>
                                     <Select
+                                        sx={{ '.MuiSvgIcon-root': { color: '#ffffff' } }}
                                         label="Ano"
                                         size="small"
                                         labelId="ano-label"
@@ -176,7 +174,7 @@ export default function Eventos() {
                     {eventosFiltrados.map((evento) => (
                         <CardEvento
                             foto={
-                                <img src={eventoFoto} alt="Logo of BH Tec" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                <img src={eventoFoto} alt="Logo do BH Tec" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             }
                             conteudo={
                                 <p className="fw-normal">
@@ -188,7 +186,7 @@ export default function Eventos() {
                                     <Row>
                                         <Col>
                                             <Row>
-                                                <b className="fs-5 fw-normal">Inicio: {Moment(evento.data_inicio).format('DD/MM/YYYY')}</b>
+                                                <b className="fs-5 fw-normal">Início: {Moment(evento.data_inicio).format('DD/MM/YYYY')}</b>
                                             </Row>
                                             <Row>
                                                 <b className="fs-5 fw-normal">Fim: {Moment(evento.data_fim).format('DD/MM/YYYY')}</b>
@@ -225,8 +223,6 @@ export default function Eventos() {
                             }
                         />
                     ))}
-
-
                 </Col>
             </Row>
 
@@ -241,3 +237,4 @@ export default function Eventos() {
         </>
     )
 }
+

@@ -51,6 +51,10 @@ export default function AtualizarEmpresa() {
     function validarCnpj(cnpj: string) {
         return /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
     }
+    function validarSala(sala: string) {
+        // Só aceita números e no mínimo 1 dígito
+        return /^\d+$/.test(sala);
+    }
 
     async function atualizarEmpresa(e: React.FormEvent) {
         e.preventDefault();
@@ -70,7 +74,7 @@ export default function AtualizarEmpresa() {
             setCnpjError("CNPJ inválido. Use o formato 99.999.999/9999-99");
             erro = true;
         }
-        
+
         if (erro) return;
 
         console.log(nome, cnpj, email, sala, telefone, responsavel);
@@ -145,10 +149,12 @@ export default function AtualizarEmpresa() {
                         <InputGroup className="mb-3">
                             <InputGroup.Text>Sala</InputGroup.Text>
                             <Form.Control
+                                value={sala}
                                 onChange={(evt) => setSala(evt.target.value)}
                                 type="text"
                                 placeholder="Informe a SALA"
                                 required
+
                             />
                         </InputGroup>
 

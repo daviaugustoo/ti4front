@@ -6,12 +6,12 @@ import { relatorioMensal, graficoMediaResiduos, graficoMediaResiduosTotal } from
 import * as React from 'react';
 import CardEmBranco from "../components/CardEmBranco";
 
-
 export default function RelatorioPrincipal() {
 
     const [media, setMedia] = useState<any[]>([])
     const [mediaTotal, setMediaTotal] = useState<any[]>([])
     const [residuosMaiorEvento, setResiduosMaiorEvento] = useState<any[]>([])
+    const [valorCardMaiorResiduo, setValorCardMaiorResiduo] = useState<string>("");
     const [relatorio, setRelatorio] = useState({
         quatia_empresas: 0,
         quantia_eventos: 0,
@@ -49,9 +49,9 @@ export default function RelatorioPrincipal() {
                     }
                 }
                 if (relatorio.maior_residuo === null) {
-                    relatorio.maior_residuo = "Nenhum Resíduo Gerado"
+                    setValorCardMaiorResiduo("Nenhum Resíduo Gerado")
                 } else {
-                    relatorio.maior_residuo = relatorio.maior_residuo.toString() + " Sacos"
+                    setValorCardMaiorResiduo(relatorio.maior_residuo + " - " + relatorio.maior_residuo_valor.toString() + " Sacos")
                 }
                 if (relatorio.maior_residuo_valor === null) {
                     relatorio.maior_residuo_valor = "0"
@@ -105,22 +105,25 @@ export default function RelatorioPrincipal() {
                 <Row className="justify-content-end align-items-center">
                     <Col className="justify-content-end text-end">
                         <FormControl fullWidth>
-                            <InputLabel id="mes-label">Mês</InputLabel>
+                            <InputLabel sx={{ color: "#ffffff" }}
+                                id="mes-label">Mês</InputLabel>
                             <Select
                                 size="small"
                                 labelId="mes-label"
                                 label="Mês"
                                 value={selectedMonth}
                                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                                sx={{ color: "#ffffff" }}
                             >
-                                {[
-
-                                    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
-                                ].map((mes, index) => (
-                                    <MenuItem key={index + 1} value={index + 1}>
-                                        {mes}
-                                    </MenuItem>
-                                ))}
+                                {
+                                    [
+                                        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+                                    ].map((mes, index) => (
+                                        <MenuItem key={index + 1} value={index + 1}>
+                                            {mes}
+                                        </MenuItem>
+                                    ))
+                                }
                             </Select>
                         </FormControl>
                     </Col>
@@ -128,13 +131,16 @@ export default function RelatorioPrincipal() {
                     {/* Filtro de ano */}
                     <Col className="justify-content-end text-end">
                         <FormControl fullWidth>
-                            <InputLabel id="ano-label">Ano</InputLabel  >
+                            <InputLabel sx={{ color: "#ffffff" }}
+                                id="ano-label">Ano</InputLabel>
                             <Select
                                 label="Ano"
                                 size="small"
                                 labelId="ano-label"
                                 value={selectedYear}
                                 onChange={(e) => setSelectedYear(Number(e.target.value))}
+                                sx={{ color: "#ffffff" }}
+
                             >
                                 {anosDisponiveis.map((ano) => (
                                     <MenuItem key={ano} value={ano}>
@@ -145,17 +151,17 @@ export default function RelatorioPrincipal() {
                         </FormControl>
                     </Col>
                 </Row>
-            </Paper>
+            </Paper >
             <Paper className="p-1 mb-3" style={{ backgroundColor: "#189995" }}>
                 <Col className="justify-content-center text-center">
-                    <h2 style={{ color: "#ffffff" }}>Relatorio Mensal</h2>
+                    <h2 style={{ color: "#ffffff" }}>Relatório Mensal</h2>
                 </Col>
             </Paper>
             <Row>
                 <Col>
                     <Paper className="p-3 mb-3">
                         <CardEmBranco
-                            titulo="Quantia de Empresas Cadastradas"
+                            titulo="Quantidade de Empresas Cadastradas"
                             conteudo={relatorio.quatia_empresas.toString()}
                         />
                     </Paper>
@@ -163,18 +169,18 @@ export default function RelatorioPrincipal() {
                 <Col>
                     <Paper className="p-3 mb-3">
                         <CardEmBranco
-                            titulo="Quantia de Eventos Realizados Nesse Mes"
+                            titulo="Quantidade de Eventos Realizados Neste Mês"
                             conteudo={relatorio.quantia_eventos.toString()}
                         />
                     </Paper>
                 </Col>
-            </Row >
+            </Row>
             <Row>
                 <Col>
                     <Paper className="p-3 mb-3" style={{ height: "200px", width: "360px" }}>
                         <CardEmBranco
-                            titulo="Residuo Mais Gerado"
-                            conteudo={relatorio.maior_residuo.toString()}
+                            titulo="Resíduo Mais Gerado"
+                            conteudo={valorCardMaiorResiduo}
                         />
                     </Paper>
                 </Col>
@@ -185,20 +191,20 @@ export default function RelatorioPrincipal() {
                             conteudo={relatorio.maior_evento.nome}
                         />
                     </Paper>
-                </Col >
+                </Col>
                 <Col>
                     <Paper className="p-3 mb-3" style={{ height: "200px", width: "360px" }}>
                         <CardEmBranco
-                            titulo="Total Residuos do Mes"
-                            conteudo={relatorio.total_residuo_no_mes.toString() + " Sacos"}
+                            titulo="Total de Resíduos do Mês"
+                            conteudo={relatorio.total_residuo_no_mes.toString()}
                         />
                     </Paper>
-                </Col >
-            </Row >
-            <Paper className="p-3 mb-1" >
+                </Col>
+            </Row>
+            <Paper className="p-3 mb-1">
                 <Row>
                     <Col className="justify-content-center text-center">
-                        <h3 style={{ color: "#189995" }}>Residuos do Evento {relatorio.maior_evento.nome}:</h3>
+                        <h3 style={{ color: "#189995" }}>Resíduos do Evento {relatorio.maior_evento.nome}:</h3>
                     </Col>
                     <ResponsiveContainer width="100%" height={250} className="mt-3">
                         <BarChart data={residuosMaiorEvento}>
@@ -213,7 +219,7 @@ export default function RelatorioPrincipal() {
                 </Row>
                 <Row>
                     <Col className="justify-content-center text-center">
-                        <h3 style={{ color: "#189995" }}>Media de Residuos do Mes:</h3>
+                        <h3 style={{ color: "#189995" }}>Média de Resíduos do Mês:</h3>
                     </Col>
                     <ResponsiveContainer width="100%" height={250} className="mt-3">
                         <BarChart data={media}>
@@ -228,7 +234,7 @@ export default function RelatorioPrincipal() {
                 </Row>
                 <Row>
                     <Col className="justify-content-center text-center">
-                        <h3 style={{ color: "#189995" }}>Media de Residuos Total:</h3>
+                        <h3 style={{ color: "#189995" }}>Média de Resíduos Totais:</h3>
                     </Col>
                     <ResponsiveContainer width="100%" height={250} className="mt-3">
                         <BarChart data={mediaTotal}>
@@ -242,7 +248,6 @@ export default function RelatorioPrincipal() {
                     </ResponsiveContainer>
                 </Row>
             </Paper>
-
         </>
     )
 }

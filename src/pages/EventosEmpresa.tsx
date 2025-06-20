@@ -117,12 +117,13 @@ export default function EventosEmpresa() {
                             {/* Filtro de mês */}
                             <Col md={2} className="justify-content-end text-end">
                                 <FormControl fullWidth>
-                                    <InputLabel id="mes-label">Mês</InputLabel>
+                                    <InputLabel sx={{ color: "#ffffff" }} id="mes-label">Mês</InputLabel>
                                     <Select
                                         size="small"
                                         labelId="mes-label"
                                         label="Mês"
                                         value={selectedMonth}
+                                        sx={{ color: "#ffffff" }}
                                         onChange={(e) => setSelectedMonth(Number(e.target.value))}
                                     >
                                         {[
@@ -139,9 +140,10 @@ export default function EventosEmpresa() {
                             {/* Filtro de ano */}
                             <Col md={1} className="justify-content-end text-end">
                                 <FormControl fullWidth>
-                                    <InputLabel id="ano-label">Ano</InputLabel  >
+                                    <InputLabel sx={{ color: "#ffffff" }} id="ano-label">Ano</InputLabel  >
                                     <Select
                                         label="Ano"
+                                        sx={{ color: "#ffffff" }}
                                         size="small"
                                         labelId="ano-label"
                                         value={selectedYear}

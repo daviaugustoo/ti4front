@@ -31,6 +31,10 @@ export default function NovaEmpresa() {
         return /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(cnpj);
     }
 
+    function validarSala(sala: string) {
+        return /^\d+$/.test(sala);
+    }
+
     async function criarEmpresa(e: React.FormEvent) {
         e.preventDefault();
         setEmailError("");
@@ -50,7 +54,10 @@ export default function NovaEmpresa() {
             setCnpjError("CNPJ inválido. Use o formato 99.999.999/9999-99");
             erro = true;
         }
-
+        // if (!validarSala(sala)) {
+        //     alert("Sala deve conter apenas números.");
+        //     erro = true;
+        // }
         if (erro) return;
 
         if (nome && cnpj && email && sala && telefone && responsavel) {

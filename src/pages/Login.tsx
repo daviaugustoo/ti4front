@@ -67,7 +67,7 @@ export default function Login() {
                 <Col className="d-flex justify-content-center" sm={12} md={8} lg={6}>
                     <Box className="rounded p-5 shadow-lg w-100" style={{ backgroundColor: "rgba(255,255,255,0.95)" }}>
                         <h1 className="text-center mb-4" style={{ fontWeight: "bold", color: "#1976d2" }}>
-                            TrashMap
+                            Resinálise
                         </h1>
                         <Form onSubmit={handleLogin}>
                             <InputGroup className="mb-4">

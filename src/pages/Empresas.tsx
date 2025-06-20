@@ -23,7 +23,7 @@ import EventIcon from '@mui/icons-material/Event';
 export default function Empresas() {
     const navegar = useNavigate();
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
-    const [empresaParaAtualiar, setEmpresaParaAtualizar] = useState<Empresa>();
+    const [empresaParaAtualizar, setEmpresaParaAtualizar] = useState<Empresa>();
     const [openEmpresaAtualizar, setOpenEmpresaAtualizar] = useState<boolean>(false);
     const [empresaParaDeletar, setEmpresaParaDeletar] = useState<Empresa>();
     const [openEmpresaDeletar, setOpenEmpresaDeletar] = useState<boolean>(false);
@@ -33,14 +33,12 @@ export default function Empresas() {
             try {
                 const empresas = await getEmpresas();
                 setEmpresas(empresas)
-            }
-            catch (error) {
+            } catch (error) {
                 console.log("Erro ao buscar empresas:", error);
             }
         };
         buscaData();
     }, [openEmpresaAtualizar, openEmpresaDeletar]);
-
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -56,24 +54,21 @@ export default function Empresas() {
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.action.hover,
         },
-        // hide last border
         '&:last-child td, &:last-child th': {
             border: 0,
         },
     }));
-
 
     function handleOpenAtualizaEmpresa(empresa: Empresa) {
         setEmpresaParaAtualizar(empresa);
         setOpenEmpresaAtualizar(true);
     }
 
-
     async function handleAtualizaEmpresa(empresa: EmpresaPayload) {
         handleCloseAtualizaEmpresa();
         try {
-            if (empresaParaAtualiar?.id) {
-                await putEmpresa(empresaParaAtualiar?.id, empresa);
+            if (empresaParaAtualizar?.id) {
+                await putEmpresa(empresaParaAtualizar?.id, empresa);
             }
         } catch (error) {
             console.log("Erro ao atualizar empresa:", error);
@@ -99,6 +94,7 @@ export default function Empresas() {
     async function handleCloseDeleteEmpresa() {
         setOpenEmpresaDeletar(false);
     }
+
     async function handleCloseAtualizaEmpresa() {
         setOpenEmpresaAtualizar(false);
     }
@@ -119,7 +115,7 @@ export default function Empresas() {
                                 <TableRow>
                                     <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>Nome</StyledTableCell>
                                     <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>CNPJ</StyledTableCell>
-                                    <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>Email</StyledTableCell>
+                                    <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>E-mail</StyledTableCell>
                                     <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>Sala</StyledTableCell>
                                     <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>Telefone</StyledTableCell>
                                     <StyledTableCell style={{ backgroundColor: "#ffffff", color: "#000000" }}>Responsável</StyledTableCell>
@@ -144,7 +140,6 @@ export default function Empresas() {
                                                     search: createSearchParams({
                                                         id: empresa.id.toString()
                                                     }).toString()
-
                                                 })}
                                             >
                                                 <EditIcon />
@@ -177,14 +172,11 @@ export default function Empresas() {
                         </Table>
                     </TableContainer>
 
-
                     <Button
                         className="mt-3"
                         style={{ backgroundColor: "#189995", border: "none" }}
                         onClick={() => {
-                            navegar({
-                                pathname: "/novaEmpresa",
-                            });
+                            navegar({ pathname: "/novaEmpresa" });
                         }}
                     >
                         <AddIcon sx={{ fontSize: "large" }} /> Nova Empresa
@@ -195,7 +187,7 @@ export default function Empresas() {
             <AtualizarEmpresa
                 open={openEmpresaAtualizar}
                 onClose={handleCloseAtualizaEmpresa}
-                empresa={empresaParaAtualiar}
+                empresa={empresaParaAtualizar}
                 onSubmitValue={(empresa: EmpresaPayload) => handleAtualizaEmpresa(empresa)}
                 title="Atualizar Empresa"
             />

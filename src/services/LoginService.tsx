@@ -2,12 +2,12 @@ import api from "./api";
 
 export async function login(email: string, password: string) {
     try {
-        const response = await api.post("/login", { email, password })
-        localStorage.setItem('token', response.data.token)
+        const response = await api.post("/login", { email, password });
+        localStorage.setItem('token', response.data.token);
         return response.data;
-    }
-    catch (error) {
+    } catch (error) {
         console.error("Erro ao fazer o login: ", error);
+        throw error;
     }
 }
 

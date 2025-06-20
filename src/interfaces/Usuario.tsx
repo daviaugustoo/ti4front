@@ -4,4 +4,5 @@ interface Usuario {
     email: string;
     telefone: string;
     password: string;
+    password_digest: string;
 }
