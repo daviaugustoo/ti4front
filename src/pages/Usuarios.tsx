@@ -108,19 +108,7 @@ export default function Usuarios() {
                                         <StyledTableCell>{Usuario.email}</StyledTableCell>
                                         <StyledTableCell>{Usuario.telefone}</StyledTableCell>
                                         <StyledTableCell align="center">
-                                            <Button
-                                                className="m-1"
-                                                style={{ backgroundColor: "#189995", border: "none" }}
-                                                onClick={() => navegar({
-                                                    pathname: "/atualizarUsuario",
-                                                    search: createSearchParams({
-                                                        id: Usuario.id.toString()
-                                                    }).toString()
-
-                                                })}
-                                            >
-                                                <EditIcon />
-                                            </Button>
+                                            
                                             <Button
                                                 className="m-1"
                                                 style={{ backgroundColor: "#189995", border: "none" }}
